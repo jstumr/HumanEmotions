@@ -1,0 +1,94 @@
+package uni.project.action;
+
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import uni.project.data.QuestionBean;
+
+
+/**
+ * Servlet implementation class getTeil1QuestionsAction
+ */
+@WebServlet("/feedback2")
+public class GetFeedback2Action extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public GetFeedback2Action() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+   // DBConnection dbCon = null;
+    Connection con = null;
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doPost(request, response);
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		System.out.println("GetFeedback1Action inside do post");
+		ArrayList<QuestionBean> questionsArray = new ArrayList<QuestionBean>();
+		try{
+			//System.out.println("GetFeedback1Action before  get connection");
+			String dbUrl = "jdbc:mysql://localhost:3306/dbexperiment";
+			String dbClass = "com.mysql.jdbc.Driver";
+			con = null;
+			
+				Class.forName(dbClass);
+				con =DriverManager.getConnection(dbUrl,"root","adminadmin");
+			
+//			System.out.println("questions got connection");
+			Statement s =con.createStatement();
+			String sql="select * from t_feedbackquestions where feedbackset = 2";
+			ResultSet rs=s.executeQuery(sql);
+			//System.out.println("questions data fechted");
+			while(rs.next())
+			{
+				//System.out.println(rs.getString("question"));
+				QuestionBean qb = new QuestionBean();
+				qb.setQuesId(rs.getInt("id"));
+				qb.setQues(rs.getString("question"));
+				qb.setOptionType(rs.getString("optionset"));
+				questionsArray.add(qb);
+					
+			}
+			con.close();
+			con = null;
+		}
+		catch(Exception e) 
+		{			
+			e.printStackTrace();
+			con = null;
+		}
+				
+		
+        System.out.println("GetFeedback1Action Session created : "+ request.getSession().getId());
+		System.out.println("GetFeedback1Action testType : "+ request.getSession().getAttribute("testType"));
+		request.getSession().setAttribute("startQuesNo", 0);
+		request.getSession().setAttribute("feedback2_ques", questionsArray);
+		request.getRequestDispatcher("feedback2.jsp").forward(request, response);
+	}
+
+}

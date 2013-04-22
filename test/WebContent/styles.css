@@ -1,0 +1,42 @@
+td.heading{	font-size: 25px;
+	align: left;
+	}
+
+	.userdataQTable{
+	min-width: 400px;
+			
+	}
+	
+	.numColumn{
+	align: right;
+	}
+	
+	.userdataAnswer{
+	width: 250px;
+	}
+	
+	
+tr.bigFont{
+	font-size: 20px;
+	
+}
+input.userdataAnswerBox{
+	width: 200px;
+	}
+
+p.thanks{
+	font-size: 36px;
+}
+.bigFont{
+	font-size: 25px;
+	
+}
+
+p red_color {	color: #E41B17; }
+
+table .resultTable { 
+	border-collape:collapse; 
+	border: 5px solid black; 
+	font-size: 20px;
+	}
+
